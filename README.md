@@ -2,7 +2,7 @@
 
 ## Demonstration
 
-<video src="https://github.com/ercis/bpmn-guard/raw/main/screencast.mp4" controls width="100%"></video>
+https://github.com/user-attachments/assets/20d8fff3-be8c-4ba7-af45-dfc4606da4b6
 
 > If the player above doesn't load, [watch the screencast here](https://github.com/ercis/bpmn-guard/raw/main/screencast.mp4).
 
