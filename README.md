@@ -1,5 +1,11 @@
 # BPMN Guard — Automated Quality Checks for BPMN Models
 
+## Demonstration
+
+<video src="https://github.com/ercis/bpmn-guard/raw/main/screencast.mp4" controls width="100%"></video>
+
+> If the player above doesn't load, [watch the screencast here](https://github.com/ercis/bpmn-guard/raw/main/screencast.mp4).
+
 ## Application Startup
 
 The app ships in **demo mode**: a single fixed user, files on the local filesystem, no external accounts. The only secret you need is an OpenAI-compatible API key for the LLM-powered checks (semantic labels, duplicates, chat). The bundled Postgres-with-pgvector container is started automatically.
