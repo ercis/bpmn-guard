@@ -1,3 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="180" height="180" viewBox="0 0 180 180"><image width="180" height="180" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAAKE/YAAAAABlBMVEXSBR7///+CCY0lAAAAg0lEQVR4nO3OgQkAIADDMP3/aV8QxTEwOaB0DAAAAAAAAAAAAD42N9T1TZs2XdA3bdp0Qd+0adMFfdOmTRf0TZu+jL5mOsV0iukU0ymmU0ynmE4xnWI6xXSK6RTTx9HXfdOmTRf0TZs2XdA3bdp0Qd+0adMFfdOmAQAAAAAAAAAA+MMCX4UZ4WFFE0kAAAAASUVORK5CYII="></image></svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
-@media (prefers-color-scheme: dark) { :root { filter: none; } }
-</style></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <path fill="#D2051E"
+        d="M256 40 L432 104 V268 C432 376 354 458 256 488 C158 458 80 376 80 268 V104 Z"/>
+  <path fill="none" stroke="#ffffff" stroke-width="44"
+        stroke-linecap="round" stroke-linejoin="round"
+        d="M168 264 L232 330 L348 196"/>
+</svg>
