@@ -1,0 +1,50 @@
+extends: ["@commitlint/config-conventional"]
+
+rules:
+  subject-empty:
+    - 2
+    - "never"
+  subject-min-length:
+    - 2
+    - "always"
+    - 3
+  type-enum:
+    - 2
+    - "always"
+    - [
+        "build",
+        "build!",
+        "chore",
+        "chore!",
+        "ci",
+        "ci!",
+        "docs",
+        "docs!",
+        "feat",
+        "feat!",
+        "fix",
+        "fix!",
+        "perf",
+        "perf!",
+        "refactor",
+        "refactor!",
+        "revert",
+        "revert!",
+        "style",
+        "test",
+        "test!",
+      ]
+  header-case:
+    - 2
+    - "always"
+    - "lower-case"
+  header-full-stop:
+    - 2
+    - "never"
+    - "."
+  header-trim:
+    - 2
+    - "always"
+  subject-exclamation-mark:
+    - 0
+    - "always"

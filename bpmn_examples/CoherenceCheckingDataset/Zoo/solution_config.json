@@ -1,0 +1,12 @@
+{
+  "relevant changes": [],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+      {
+          "change_description": "changed Coordinates of first Task",
+          "dimension": "task"
+      }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "new department 'Production' consisting of Master lane and worker lane",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "changed lane name from 'Employee' to 'Worker'",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "added conditional connector from 'Review quality' to 'Produce order' with condition 'bad quality'",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "added default flow to end event 'Quality ok'",
+      "dimension": "control flow"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "visual changes because of new 'Production' department",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "changed connector to default flow 'all parts available'",
+      "dimension": "control flow"
+    }
+  ]
+}

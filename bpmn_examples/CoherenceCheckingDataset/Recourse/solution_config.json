@@ -1,0 +1,25 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "added Gateway after Reminder is due",
+      "dimension": "control flow"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "deleted activity 'case closed'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "changed sequence flow for 'close case'",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "changed sequence flow for second reminder",
+      "dimension": "control flow"
+    }
+  ]
+}

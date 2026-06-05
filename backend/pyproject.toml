@@ -1,0 +1,97 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Backend API for BPMN Guard - automated quality checks for BPMN models."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "alembic>=1.17.1",
+    "asyncpg>=0.30.0",
+    "coloredlogs>=15.0.1",
+    "fastapi>=0.120.1",
+    "google-genai>=1.49.0",
+    "gunicorn>=23.0.0",
+    "langchain>=1.0.3",
+    "langchain-google-genai>=3.0.2",
+    "langchain-openai>=1.0.1",
+    "langchain-postgres>=0.0.16",
+    "langgraph>=1.0.1",
+    "openai>=2.6.1",
+    "psycopg2-binary>=2.9.11",
+    "pydantic>=2.12.3",
+    "pydantic-settings>=2.11.0",
+    "python-dotenv>=1.2.1",
+    "python-jose[cryptography]>=3.5.0",
+    "python-multipart>=0.0.20",
+    "sqlalchemy>=2.0.44",
+    "sqlmodel>=0.0.27",
+    "uuid7>=0.1.0",
+    "uvicorn>=0.38.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.3.0",
+    "pyright>=1.1.407",
+    "pytest>=8.4.2",
+    "ruff>=0.14.2",
+    "requests",
+    "deptry>=0.24.0",
+]
+
+[tool.ruff]
+## general setting
+include = ["**/*.py"] # only analyze through python files in the src folder
+force-exclude = true # exclude files that are not in the include list but were excplictliy given via parameter (for example by pre-commit)
+line-length = 120
+src = ["app", "main.py"]
+
+[tool.ruff.lint]
+# On top of the default `select` (`E4`, E7`, `E9`, and `F`), see https://docs.astral.sh/ruff/rules/ for more info
+extend-select = ["ERA", "FAST", "COM", "SLF"]
+ignore=["COM812"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "integration: marks integration tests that require docker/services",
+]
+
+[tool.deptry.per_rule_ignores]
+# DEP002: Runtime dependencies not detected by static analysis
+DEP002 = [
+    "asyncpg",           # SQLAlchemy async driver
+    "google-genai",      # LLM provider (runtime config)
+    "gunicorn",          # Production WSGI server
+    "langchain-google-genai",  # LLM provider (runtime config)
+    "openai",            # LLM provider (runtime config)
+    "psycopg2-binary",   # SQLAlchemy sync driver
+    "python-multipart",  # FastAPI file uploads
+    "sqlmodel",          # Used via SQLAlchemy
+]
+# DEP003: Transitive dependencies that are commonly imported directly
+DEP003 = [
+    "langchain_core",
+    "langsmith",
+    "typing_extensions",
+    "starlette",
+]
+
+[tool.pyright]
+include = ["app", "main.py", "tests"]
+# Ignore missing stubs for third-party packages without type annotations
+reportMissingImports = "warning"
+# Strict null checks - catch None initialization issues
+strictParameterNoneValue = true
+reportOptionalMemberAccess = true
+reportOptionalSubscript = true
+reportOptionalCall = true
+reportOptionalIterable = true
+reportOptionalContextManager = true
+reportOptionalOperand = true

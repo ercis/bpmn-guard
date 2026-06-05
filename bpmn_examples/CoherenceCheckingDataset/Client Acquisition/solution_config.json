@@ -1,0 +1,37 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "added Activity 'analyze offer'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added Activity 'change offer according to needs'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added Sequence Flows for 'analyze offer' task",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "added Sequence Flows for 'change offer according to needs' task",
+      "dimension": "control flow"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "Spelling Potential Client",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "expanded Client Pool",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "moved all activities after new client needed",
+      "dimension": "control flow"
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  id="Definitions_anonym2" targetNamespace="http://bpmn.io/schema/bpmn">
+
+  </bpmn:process>
+    <bpmn:sequenceFlow id="Flow_align_to_end" sourceRef="Task_align" targetRef="End_client" />
+    <bpmn:sequenceFlow id="Flow_waitDetail_to_decide" sourceRef="Catch_detailOffer" targetRef="Task_align" />
+    <bpmn:sequenceFlow id="Flow_reply_to_waitDetail" sourceRef="Throw_reply" targetRef="Catch_detailOffer" />
+    <bpmn:sequenceFlow id="Flow_review_to_reply" sourceRef="Task_review" targetRef="Throw_reply" />
+    <bpmn:sequenceFlow id="Flow_client_to_review" sourceRef="Start_client" targetRef="Task_review" />
+
+    </bpmn:endEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:incoming>Flow_align_to_end</bpmn:incoming>
+    <bpmn:endEvent id="End_client" name="Send decision">
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_align_to_end</bpmn:outgoing>
+      <bpmn:incoming>Flow_waitDetail_to_decide</bpmn:incoming>
+    <bpmn:task id="Task_align" name="Align internal needs">
+
+    </bpmn:intermediateCatchEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_waitDetail_to_decide</bpmn:outgoing>
+      <bpmn:incoming>Flow_reply_to_waitDetail</bpmn:incoming>
+    <bpmn:intermediateCatchEvent id="Catch_detailOffer" name="Receive detailed offer">
+
+    </bpmn:intermediateThrowEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_reply_to_waitDetail</bpmn:outgoing>
+      <bpmn:incoming>Flow_review_to_reply</bpmn:incoming>
+    <bpmn:intermediateThrowEvent id="Throw_reply" name="Reply to offer">
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_review_to_reply</bpmn:outgoing>
+      <bpmn:incoming>Flow_client_to_review</bpmn:incoming>
+    <bpmn:task id="Task_review" name="Review offer">
+
+    </bpmn:startEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_client_to_review</bpmn:outgoing>
+    <bpmn:startEvent id="Start_client" name="Receive offer">
+  <bpmn:process id="Process_Client" isExecutable="false">
+
+  </bpmn:process>
+    <bpmn:sequenceFlow id="Flow_learn_to_end_fail" sourceRef="Task_learn" targetRef="End_fail" />
+    <bpmn:sequenceFlow id="Flow_no_to_learn" name="unsuccess" sourceRef="Gateway_success" targetRef="Task_learn" />
+
+    <bpmn:sequenceFlow id="Flow_sign_to_end_success" sourceRef="Task_sign" targetRef="End_success" />
+    <bpmn:sequenceFlow id="Flow_contract_to_sign" sourceRef="Task_prepareContract" targetRef="Task_sign" />
+    <bpmn:sequenceFlow id="Flow_yes_to_contract" name="success" sourceRef="Gateway_success" targetRef="Task_prepareContract" />
+
+    </bpmn:endEvent>
+      <bpmn:incoming>Flow_learn_to_end_fail</bpmn:incoming>
+    <bpmn:endEvent id="End_fail" name="Acquisition failed">
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_learn_to_end_fail</bpmn:outgoing>
+      <bpmn:incoming>Flow_no_to_learn</bpmn:incoming>
+    <bpmn:task id="Task_learn" name="Capture lessons learned">
+
+    </bpmn:endEvent>
+      <bpmn:incoming>Flow_sign_to_end_success</bpmn:incoming>
+    <bpmn:endEvent id="End_success" name="Client acquired">
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_sign_to_end_success</bpmn:outgoing>
+      <bpmn:incoming>Flow_contract_to_sign</bpmn:incoming>
+    <bpmn:task id="Task_sign" name="Sign contract">
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_contract_to_sign</bpmn:outgoing>
+      <bpmn:incoming>Flow_yes_to_contract</bpmn:incoming>
+    <bpmn:task id="Task_prepareContract" name="Prepare contract">
+
+    <bpmn:sequenceFlow id="Flow_catchResp_to_decide" sourceRef="Catch_ClientResponse" targetRef="Gateway_success" />
+    </bpmn:exclusiveGateway>
+      <bpmn:outgoing>Flow_no_to_learn</bpmn:outgoing>
+      <bpmn:outgoing>Flow_yes_to_contract</bpmn:outgoing>
+      <bpmn:incoming>Flow_catchResp_to_decide</bpmn:incoming>
+    <bpmn:exclusiveGateway id="Gateway_success" name="Deal successful?">
+
+    <bpmn:sequenceFlow id="Flow_throwDetail_to_catchResp" sourceRef="Throw_DetailOffer" targetRef="Catch_ClientResponse" />
+    </bpmn:intermediateCatchEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_catchResp_to_decide</bpmn:outgoing>
+      <bpmn:incoming>Flow_throwDetail_to_catchResp</bpmn:incoming>
+    <bpmn:intermediateCatchEvent id="Catch_ClientResponse" name="Client decision">
+
+    <bpmn:sequenceFlow id="Flow_negotiate_to_throwDetail" sourceRef="Task_negotiate" targetRef="Throw_DetailOffer" />
+    </bpmn:intermediateThrowEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_throwDetail_to_catchResp</bpmn:outgoing>
+      <bpmn:incoming>Flow_negotiate_to_throwDetail</bpmn:incoming>
+    <bpmn:intermediateThrowEvent id="Throw_DetailOffer" name="Detailed offer">
+
+    <bpmn:sequenceFlow id="Flow_inform_to_negotiate" sourceRef="Task_informMgmt" targetRef="Task_negotiate" />
+    </bpmn:task>
+      <bpmn:outgoing>Flow_negotiate_to_throwDetail</bpmn:outgoing>
+      <bpmn:incoming>Flow_inform_to_negotiate</bpmn:incoming>
+    <bpmn:task id="Task_negotiate" name="Negotiate and refine offer">
+
+    <bpmn:sequenceFlow id="Flow_catchOffer_to_inform" sourceRef="Catch_OfferResponse" targetRef="Task_informMgmt" />
+    </bpmn:task>
+      <bpmn:outgoing>Flow_inform_to_negotiate</bpmn:outgoing>
+      <bpmn:incoming>Flow_catchOffer_to_inform</bpmn:incoming>
+    <bpmn:task id="Task_informMgmt" name="Brief management on response">
+
+    <bpmn:sequenceFlow id="Flow_throw_to_catchOffer" sourceRef="Throw_SendOffer" targetRef="Catch_OfferResponse" />
+    </bpmn:intermediateCatchEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_catchOffer_to_inform</bpmn:outgoing>
+      <bpmn:incoming>Flow_throw_to_catchOffer</bpmn:incoming>
+    <bpmn:intermediateCatchEvent id="Catch_OfferResponse" name="Offer response received">
+
+    <bpmn:sequenceFlow id="Flow_offerTask_to_throw" sourceRef="Task_sendOfferTask" targetRef="Throw_SendOffer" />
+    </bpmn:intermediateThrowEvent>
+      <bpmn:messageEventDefinition />
+      <bpmn:outgoing>Flow_throw_to_catchOffer</bpmn:outgoing>
+      <bpmn:incoming>Flow_offerTask_to_throw</bpmn:incoming>
+    <bpmn:intermediateThrowEvent id="Throw_SendOffer" name="Offer sent">
+
+    <bpmn:sequenceFlow id="Flow_join_to_sendOffer" sourceRef="Gateway_joinPrep" targetRef="Task_sendOfferTask" />
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_offerTask_to_throw</bpmn:outgoing>
+      <bpmn:incoming>Flow_join_to_sendOffer</bpmn:incoming>
+    <bpmn:task id="Task_sendOfferTask" name="Send initial offer">
+
+    <bpmn:sequenceFlow id="Flow_portfolio_to_join" sourceRef="Task_portfolio" targetRef="Gateway_joinPrep" />
+    <bpmn:sequenceFlow id="Flow_market_to_join" sourceRef="Task_market" targetRef="Gateway_joinPrep" />
+
+    </bpmn:parallelGateway>
+      <bpmn:outgoing>Flow_join_to_sendOffer</bpmn:outgoing>
+      <bpmn:incoming>Flow_portfolio_to_join</bpmn:incoming>
+      <bpmn:incoming>Flow_market_to_join</bpmn:incoming>
+    <bpmn:parallelGateway id="Gateway_joinPrep" name="Materials ready">
+
+    <bpmn:sequenceFlow id="Flow_parallel_to_portfolio" sourceRef="Gateway_parallelPrep" targetRef="Task_portfolio" />
+    <bpmn:sequenceFlow id="Flow_parallel_to_market" sourceRef="Gateway_parallelPrep" targetRef="Task_market" />
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_portfolio_to_join</bpmn:outgoing>
+      <bpmn:incoming>Flow_parallel_to_portfolio</bpmn:incoming>
+    <bpmn:task id="Task_portfolio" name="Prepare portfolio pitch">
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_market_to_join</bpmn:outgoing>
+      <bpmn:incoming>Flow_parallel_to_market</bpmn:incoming>
+    <bpmn:task id="Task_market" name="Market research">
+
+    <bpmn:sequenceFlow id="Flow_prepare_to_parallel" sourceRef="Task_prepareApproach" targetRef="Gateway_parallelPrep" />
+
+    </bpmn:parallelGateway>
+      <bpmn:outgoing>Flow_parallel_to_portfolio</bpmn:outgoing>
+      <bpmn:outgoing>Flow_parallel_to_market</bpmn:outgoing>
+      <bpmn:incoming>Flow_prepare_to_parallel</bpmn:incoming>
+    <bpmn:parallelGateway id="Gateway_parallelPrep" name="Prepare materials">
+
+    <bpmn:sequenceFlow id="Flow_start_to_prepare" sourceRef="Start_needClient" targetRef="Task_prepareApproach" />
+
+    </bpmn:task>
+      <bpmn:outgoing>Flow_prepare_to_parallel</bpmn:outgoing>
+      <bpmn:incoming>Flow_start_to_prepare</bpmn:incoming>
+    <bpmn:task id="Task_prepareApproach" name="Plan acquisition approach">
+
+    </bpmn:startEvent>
+      <bpmn:outgoing>Flow_start_to_prepare</bpmn:outgoing>
+    <bpmn:startEvent id="Start_needClient" name="Need new client">
+  <bpmn:process id="Process_Internal" isExecutable="false">
+
+  </bpmn:collaboration>
+    <bpmn:messageFlow id="Msg_clientResp" sourceRef="Participant_Client" targetRef="Catch_ClientResponse" />
+    <bpmn:messageFlow id="Msg_detailOffer" sourceRef="Throw_DetailOffer" targetRef="Participant_Client" />
+    <bpmn:messageFlow id="Msg_offerResp" sourceRef="Participant_Client" targetRef="Catch_OfferResponse" />
+    <bpmn:messageFlow id="Msg_offer" sourceRef="Throw_SendOffer" targetRef="Participant_Client" />
+
+    <bpmn:participant id="Participant_Client" name="Potential Client" processRef="Process_Client" />
+    <bpmn:participant id="Participant_Internal" name="Client Acquisition Team" processRef="Process_Internal" />
+  <bpmn:collaboration id="Collab_anonym2">
+
+</bpmn:definitions>
+

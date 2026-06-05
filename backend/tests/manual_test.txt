@@ -1,0 +1,5 @@
+BPMN Validation Service:
+curl -X POST "http://127.0.0.1:8000/api/v1/validation/validate-upload"   -F "file=@bpmn_examples/CoherenceCheckingDataset/Client Acquisition/ClientAcquisition_V2.bpmn" | jq
+
+Custom Check Service:
+curl -X POST "http://127.0.0.1:8000/api/v1/custom-checks/custom-checks-upload"   -F "file=@bpmn_examples/__bung_1_920e781ac88741f18ff6143eacad5539.bpmn" | jq

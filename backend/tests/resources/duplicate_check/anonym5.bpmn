@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_anonym5" targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:collaboration id="Collab_anonym5">
+    <bpmn:participant id="Participant_Shop" name="Computer Hardware Shop" processRef="Process_Shipping" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_Shipping" isExecutable="false">
+    <bpmn:startEvent id="Start_ship" name="Ship goods">
+      <bpmn:outgoing>Flow_start_to_clarify</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:task id="Task_clarify" name="Clarify shipment method">
+      <bpmn:incoming>Flow_start_to_clarify</bpmn:incoming>
+      <bpmn:outgoing>Flow_clarify_to_parallel</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:parallelGateway id="GW_parallel" name="Prepare shipment">
+      <bpmn:incoming>Flow_clarify_to_parallel</bpmn:incoming>
+      <bpmn:outgoing>Flow_parallel_to_special</bpmn:outgoing>
+      <bpmn:outgoing>Flow_parallel_to_packaging</bpmn:outgoing>
+    </bpmn:parallelGateway>
+
+    <bpmn:exclusiveGateway id="GW_special" name="Special handling?">
+      <bpmn:incoming>Flow_parallel_to_special</bpmn:incoming>
+      <bpmn:outgoing>Flow_noSpecial_to_paperwork</bpmn:outgoing>
+      <bpmn:outgoing>Flow_yesSpecial_to_offers</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_offers" name="Get logistic offers">
+      <bpmn:incoming>Flow_yesSpecial_to_offers</bpmn:incoming>
+      <bpmn:outgoing>Flow_offers_to_select</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_select" name="Select logistic company and place order">
+      <bpmn:incoming>Flow_offers_to_select</bpmn:incoming>
+      <bpmn:outgoing>Flow_select_to_paperwork</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:subProcess id="Sub_paperwork" name="Prepare shipping paperwork">
+      <bpmn:incoming>Flow_noSpecial_to_paperwork</bpmn:incoming>
+      <bpmn:incoming>Flow_select_to_paperwork</bpmn:incoming>
+      <bpmn:outgoing>Flow_paperwork_to_join</bpmn:outgoing>
+
+      <bpmn:startEvent id="Sub_start" />
+      <bpmn:task id="Sub_task" name="Create label & insurance decision" />
+      <bpmn:endEvent id="Sub_end" />
+
+      <bpmn:sequenceFlow id="Sub_flow1" sourceRef="Sub_start" targetRef="Sub_task" />
+      <bpmn:sequenceFlow id="Sub_flow2" sourceRef="Sub_task" targetRef="Sub_end" />
+    </bpmn:subProcess>
+
+    <bpmn:task id="Task_choosePackaging" name="Choose packaging">
+      <bpmn:incoming>Flow_parallel_to_packaging</bpmn:incoming>
+      <bpmn:outgoing>Flow_packaging_to_package</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_package" name="Package goods">
+      <bpmn:incoming>Flow_packaging_to_package</bpmn:incoming>
+      <bpmn:outgoing>Flow_package_to_join</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:inclusiveGateway id="GW_join" name="Ready for pickup prep">
+      <bpmn:incoming>Flow_paperwork_to_join</bpmn:incoming>
+      <bpmn:incoming>Flow_package_to_join</bpmn:incoming>
+      <bpmn:outgoing>Flow_join_to_preparePickup</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+
+    <bpmn:task id="Task_preparePickup" name="Prepare for picking up goods">
+      <bpmn:incoming>Flow_join_to_preparePickup</bpmn:incoming>
+      <bpmn:outgoing>Flow_preparePickup_to_end</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="End_prepared" name="Shipment prepared">
+      <bpmn:incoming>Flow_preparePickup_to_end</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_start_to_clarify" sourceRef="Start_ship" targetRef="Task_clarify" />
+    <bpmn:sequenceFlow id="Flow_clarify_to_parallel" sourceRef="Task_clarify" targetRef="GW_parallel" />
+
+    <bpmn:sequenceFlow id="Flow_parallel_to_special" sourceRef="GW_parallel" targetRef="GW_special" />
+    <bpmn:sequenceFlow id="Flow_parallel_to_packaging" sourceRef="GW_parallel" targetRef="Task_choosePackaging" />
+
+    <bpmn:sequenceFlow id="Flow_yesSpecial_to_offers" name="yes" sourceRef="GW_special" targetRef="Task_offers" />
+    <bpmn:sequenceFlow id="Flow_offers_to_select" sourceRef="Task_offers" targetRef="Task_select" />
+    <bpmn:sequenceFlow id="Flow_select_to_paperwork" sourceRef="Task_select" targetRef="Sub_paperwork" />
+    <bpmn:sequenceFlow id="Flow_noSpecial_to_paperwork" name="no" sourceRef="GW_special" targetRef="Sub_paperwork" />
+
+    <bpmn:sequenceFlow id="Flow_paperwork_to_join" sourceRef="Sub_paperwork" targetRef="GW_join" />
+
+    <bpmn:sequenceFlow id="Flow_packaging_to_package" sourceRef="Task_choosePackaging" targetRef="Task_package" />
+    <bpmn:sequenceFlow id="Flow_package_to_join" sourceRef="Task_package" targetRef="GW_join" />
+
+    <bpmn:sequenceFlow id="Flow_join_to_preparePickup" sourceRef="GW_join" targetRef="Task_preparePickup" />
+    <bpmn:sequenceFlow id="Flow_preparePickup_to_end" sourceRef="Task_preparePickup" targetRef="End_prepared" />
+  </bpmn:process>
+
+</bpmn:definitions>
+

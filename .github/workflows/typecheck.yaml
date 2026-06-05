@@ -1,0 +1,61 @@
+name: Type Check
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  pyright:
+    name: Backend (Pyright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv sync
+        working-directory: backend
+      - name: Run Pyright
+        run: uv run pyright
+        working-directory: backend
+
+  deptry:
+    name: Backend (Deptry)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv sync
+        working-directory: backend
+      - name: Run Deptry
+        run: uv run deptry .
+        working-directory: backend
+
+  typescript:
+    name: Frontend (TypeScript)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: frontend
+      - name: Run TypeScript check
+        run: pnpm exec tsc --noEmit
+        working-directory: frontend

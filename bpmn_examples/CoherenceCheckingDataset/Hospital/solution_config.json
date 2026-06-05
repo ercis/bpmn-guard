@@ -1,0 +1,29 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "added data object 'doctor's referral'",
+      "dimension": "data"
+    },
+    {
+      "change_description": "added data collection 'calendar'",
+      "dimension": "data"
+    },
+    {
+      "change_description": "added send Task 'Report bad Sample'",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "added empty pool 'Medical Association' and connected to task 'Report bad Sample'",
+      "dimension": "organization"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "longer pool",
+      "dimension": "organization"
+    }
+  ]
+}

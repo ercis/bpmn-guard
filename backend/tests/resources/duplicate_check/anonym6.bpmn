@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_anonym6" targetNamespace="http://activiti.org/bpmn">
+
+  <bpmn2:collaboration id="Collab_anonym6">
+    <bpmn2:participant id="Participant_Hospital" name="Hospital" processRef="Process_Hospital" />
+    <bpmn2:participant id="Participant_Association" name="Medical Association" />
+    <bpmn2:messageFlow id="Msg_reportBad" sourceRef="Task_reportBad" targetRef="Participant_Association" />
+  </bpmn2:collaboration>
+
+  <bpmn2:process id="Process_Hospital" isExecutable="false">
+    <bpmn2:startEvent id="Start_patient" name="Patient arrives">
+      <bpmn2:outgoing>Flow_start_to_exam</bpmn2:outgoing>
+    </bpmn2:startEvent>
+
+    <bpmn2:task id="Task_exam" name="Examine patient">
+      <bpmn2:incoming>Flow_start_to_exam</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_exam_to_decideExtra</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:task id="Task_decideExtra" name="Decide if additional example required">
+      <bpmn2:incoming>Flow_exam_to_decideExtra</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_decideExtra_to_gwExtra</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:exclusiveGateway id="GW_extra" name="Additional example required?">
+      <bpmn2:incoming>Flow_decideExtra_to_gwExtra</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_extraYes_to_order</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_extraNo_to_release</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+
+    <bpmn2:task id="Task_order" name="Order examination & follow-up treatment">
+      <bpmn2:incoming>Flow_extraYes_to_order</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_order_to_inform</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:task id="Task_inform" name="Inform about risks">
+      <bpmn2:incoming>Flow_order_to_inform</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_inform_to_gwConsent</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:exclusiveGateway id="GW_consent" name="Patient agrees?">
+      <bpmn2:incoming>Flow_inform_to_gwConsent</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_consentYes_to_appointment</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_consentNo_to_releaseJoin</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+
+    <bpmn2:task id="Task_appointment" name="Make appointment">
+      <bpmn2:incoming>Flow_consentYes_to_appointment</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_appointment_to_prepare</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:task id="Task_prepare" name="Prepare examination">
+      <bpmn2:incoming>Flow_appointment_to_prepare</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_prepare_to_gwReadySample</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:exclusiveGateway id="GW_readySample" name="Ready to take sample?">
+      <bpmn2:incoming>Flow_prepare_to_gwReadySample</bpmn2:incoming>
+      <bpmn2:incoming>Flow_releaseJoin_to_gwReadySample</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_ready_to_takeSample</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+
+    <bpmn2:task id="Task_takeSample" name="Take sample">
+      <bpmn2:incoming>Flow_ready_to_takeSample</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_takeSample_to_parallel</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:parallelGateway id="GW_parallel" name="Handle sample">
+      <bpmn2:incoming>Flow_takeSample_to_parallel</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_parallel_to_send</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_parallel_to_followup</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+
+    <bpmn2:task id="Task_sendSample" name="Send sample">
+      <bpmn2:incoming>Flow_parallel_to_send</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_send_to_joinParallel</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:task id="Task_followup" name="Perform follow-up treatment">
+      <bpmn2:incoming>Flow_parallel_to_followup</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_followup_to_joinParallel</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:parallelGateway id="GW_joinParallel">
+      <bpmn2:incoming>Flow_send_to_joinParallel</bpmn2:incoming>
+      <bpmn2:incoming>Flow_followup_to_joinParallel</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_joinParallel_to_validateSample</bpmn2:outgoing>
+    </bpmn2:parallelGateway>
+
+    <bpmn2:task id="Task_validateSample" name="Validate sample state">
+      <bpmn2:incoming>Flow_joinParallel_to_validateSample</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_validateSample_to_gwOk</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:exclusiveGateway id="GW_sampleOk" name="Sample ok?">
+      <bpmn2:incoming>Flow_validateSample_to_gwOk</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_ok_to_analyse</bpmn2:outgoing>
+      <bpmn2:outgoing>Flow_notOk_to_report</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+
+    <bpmn2:task id="Task_analyse" name="Analyse sample">
+      <bpmn2:incoming>Flow_ok_to_analyse</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_analyse_to_subResults</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:subProcess id="Sub_results" name="Validate results and diagnose">
+      <bpmn2:incoming>Flow_analyse_to_subResults</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_subResults_to_therapy</bpmn2:outgoing>
+
+      <bpmn2:startEvent id="Sub_start" />
+      <bpmn2:task id="Sub_validate" name="Validate results" />
+      <bpmn2:task id="Sub_diagnose" name="Make diagnosis" />
+      <bpmn2:endEvent id="Sub_end" />
+
+      <bpmn2:sequenceFlow id="Sub_f1" sourceRef="Sub_start" targetRef="Sub_validate" />
+      <bpmn2:sequenceFlow id="Sub_f2" sourceRef="Sub_validate" targetRef="Sub_diagnose" />
+      <bpmn2:sequenceFlow id="Sub_f3" sourceRef="Sub_diagnose" targetRef="Sub_end" />
+    </bpmn2:subProcess>
+
+    <bpmn2:task id="Task_therapy" name="Describe therapy">
+      <bpmn2:incoming>Flow_subResults_to_therapy</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_therapy_to_end</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:endEvent id="End_done" name="Therapy described">
+      <bpmn2:incoming>Flow_therapy_to_end</bpmn2:incoming>
+    </bpmn2:endEvent>
+
+    <bpmn2:sendTask id="Task_reportBad" name="Report bad sample">
+      <bpmn2:incoming>Flow_notOk_to_report</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_report_to_releaseJoin</bpmn2:outgoing>
+    </bpmn2:sendTask>
+
+    <bpmn2:task id="Task_release" name="Release patient">
+      <bpmn2:incoming>Flow_extraNo_to_release</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_release_to_endRelease</bpmn2:outgoing>
+    </bpmn2:task>
+
+    <bpmn2:endEvent id="End_release" name="Patient released">
+      <bpmn2:incoming>Flow_release_to_endRelease</bpmn2:incoming>
+    </bpmn2:endEvent>
+
+    <bpmn2:exclusiveGateway id="GW_releaseJoin">
+      <bpmn2:incoming>Flow_consentNo_to_releaseJoin</bpmn2:incoming>
+      <bpmn2:incoming>Flow_report_to_releaseJoin</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_releaseJoin_to_gwReadySample</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+
+    <bpmn2:sequenceFlow id="Flow_start_to_exam" sourceRef="Start_patient" targetRef="Task_exam" />
+    <bpmn2:sequenceFlow id="Flow_exam_to_decideExtra" sourceRef="Task_exam" targetRef="Task_decideExtra" />
+    <bpmn2:sequenceFlow id="Flow_decideExtra_to_gwExtra" sourceRef="Task_decideExtra" targetRef="GW_extra" />
+
+    <bpmn2:sequenceFlow id="Flow_extraYes_to_order" name="Yes" sourceRef="GW_extra" targetRef="Task_order" />
+    <bpmn2:sequenceFlow id="Flow_extraNo_to_release" name="No" sourceRef="GW_extra" targetRef="Task_release" />
+
+    <bpmn2:sequenceFlow id="Flow_order_to_inform" sourceRef="Task_order" targetRef="Task_inform" />
+    <bpmn2:sequenceFlow id="Flow_inform_to_gwConsent" sourceRef="Task_inform" targetRef="GW_consent" />
+
+    <bpmn2:sequenceFlow id="Flow_consentYes_to_appointment" name="Yes" sourceRef="GW_consent" targetRef="Task_appointment" />
+    <bpmn2:sequenceFlow id="Flow_consentNo_to_releaseJoin" name="No" sourceRef="GW_consent" targetRef="GW_releaseJoin" />
+
+    <bpmn2:sequenceFlow id="Flow_appointment_to_prepare" sourceRef="Task_appointment" targetRef="Task_prepare" />
+    <bpmn2:sequenceFlow id="Flow_prepare_to_gwReadySample" sourceRef="Task_prepare" targetRef="GW_readySample" />
+
+    <bpmn2:sequenceFlow id="Flow_release_to_endRelease" sourceRef="Task_release" targetRef="End_release" />
+
+    <bpmn2:sequenceFlow id="Flow_releaseJoin_to_gwReadySample" sourceRef="GW_releaseJoin" targetRef="GW_readySample" />
+
+    <bpmn2:sequenceFlow id="Flow_ready_to_takeSample" sourceRef="GW_readySample" targetRef="Task_takeSample" />
+    <bpmn2:sequenceFlow id="Flow_takeSample_to_parallel" sourceRef="Task_takeSample" targetRef="GW_parallel" />
+
+    <bpmn2:sequenceFlow id="Flow_parallel_to_send" sourceRef="GW_parallel" targetRef="Task_sendSample" />
+    <bpmn2:sequenceFlow id="Flow_parallel_to_followup" sourceRef="GW_parallel" targetRef="Task_followup" />
+
+    <bpmn2:sequenceFlow id="Flow_send_to_joinParallel" sourceRef="Task_sendSample" targetRef="GW_joinParallel" />
+    <bpmn2:sequenceFlow id="Flow_followup_to_joinParallel" sourceRef="Task_followup" targetRef="GW_joinParallel" />
+    <bpmn2:sequenceFlow id="Flow_joinParallel_to_validateSample" sourceRef="GW_joinParallel" targetRef="Task_validateSample" />
+
+    <bpmn2:sequenceFlow id="Flow_validateSample_to_gwOk" sourceRef="Task_validateSample" targetRef="GW_sampleOk" />
+    <bpmn2:sequenceFlow id="Flow_ok_to_analyse" name="Yes" sourceRef="GW_sampleOk" targetRef="Task_analyse" />
+    <bpmn2:sequenceFlow id="Flow_notOk_to_report" name="No" sourceRef="GW_sampleOk" targetRef="Task_reportBad" />
+
+    <bpmn2:sequenceFlow id="Flow_analyse_to_subResults" sourceRef="Task_analyse" targetRef="Sub_results" />
+    <bpmn2:sequenceFlow id="Flow_subResults_to_therapy" sourceRef="Sub_results" targetRef="Task_therapy" />
+    <bpmn2:sequenceFlow id="Flow_therapy_to_end" sourceRef="Task_therapy" targetRef="End_done" />
+
+    <bpmn2:sequenceFlow id="Flow_report_to_releaseJoin" sourceRef="Task_reportBad" targetRef="GW_releaseJoin" />
+  </bpmn2:process>
+
+</bpmn2:definitions>
+

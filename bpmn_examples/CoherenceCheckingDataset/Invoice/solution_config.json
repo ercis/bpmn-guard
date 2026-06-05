@@ -1,0 +1,12 @@
+{
+  "relevant changes": [],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "converted gateway to conditional connectors after activity 'Vendor located in SAP system'",
+      "dimension": "control flow"
+    }
+  ]
+}

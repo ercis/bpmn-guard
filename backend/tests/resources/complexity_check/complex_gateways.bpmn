@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Complex_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.40.1">
+
+  <bpmn:process id="Process_1" isExecutable="false">
+
+    <bpmn:startEvent id="Start" name="Start">
+      <bpmn:outgoing>Flow_Start_Xor</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Start_Or</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Start_And</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:exclusiveGateway id="Xor_1" name="XOR?">
+      <bpmn:incoming>Flow_Start_Xor</bpmn:incoming>
+      <bpmn:outgoing>F_x1</bpmn:outgoing>
+      <bpmn:outgoing>F_x2</bpmn:outgoing>
+      <bpmn:outgoing>F_x3</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <!-- OR gateway is used only for fan-out complexity in the tests -->
+    <bpmn:inclusiveGateway id="Or_1" name="OR?">
+      <bpmn:incoming>Flow_Start_Or</bpmn:incoming>
+      <bpmn:outgoing>F_o1</bpmn:outgoing>
+      <bpmn:outgoing>F_o2</bpmn:outgoing>
+    </bpmn:inclusiveGateway>
+
+    <!-- AND gateway is used only for fan-out complexity in the tests -->
+    <bpmn:parallelGateway id="And_1" name="AND">
+      <bpmn:incoming>Flow_Start_And</bpmn:incoming>
+      <bpmn:outgoing>F_a1</bpmn:outgoing>
+      <bpmn:outgoing>F_a2</bpmn:outgoing>
+    </bpmn:parallelGateway>
+
+    <bpmn:task id="T1" name="A" />
+    <bpmn:task id="T2" name="B" />
+    <bpmn:task id="T3" name="C" />
+    <bpmn:task id="T4" name="D" />
+
+    <bpmn:endEvent id="End" name="End">
+      <bpmn:incoming>Flow_T1_End</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- Minimal semantic connectivity so Camunda can render a diagram.
+         Important: these helper flows must NOT originate from XOR, otherwise XOR fan-out changes. -->
+    <bpmn:sequenceFlow id="Flow_Start_Xor" sourceRef="Start" targetRef="Xor_1" />
+    <bpmn:sequenceFlow id="Flow_Start_Or" sourceRef="Start" targetRef="Or_1" />
+    <bpmn:sequenceFlow id="Flow_Start_And" sourceRef="Start" targetRef="And_1" />
+
+    <bpmn:sequenceFlow id="Flow_T1_End" sourceRef="T1" targetRef="End" />
+
+    <!-- Fan-out flows used by the complexity service -->
+    <bpmn:sequenceFlow id="F_x1" name="x1" sourceRef="Xor_1" targetRef="T1" />
+    <bpmn:sequenceFlow id="F_x2" name="x2" sourceRef="Xor_1" targetRef="T2" />
+    <bpmn:sequenceFlow id="F_x3" name="x3" sourceRef="Xor_1" targetRef="T3" />
+
+    <bpmn:sequenceFlow id="F_o1" name="o1" sourceRef="Or_1" targetRef="T1" />
+    <bpmn:sequenceFlow id="F_o2" name="o2" sourceRef="Or_1" targetRef="T2" />
+
+    <bpmn:sequenceFlow id="F_a1" name="a1" sourceRef="And_1" targetRef="T3" />
+    <bpmn:sequenceFlow id="F_a2" name="a2" sourceRef="And_1" targetRef="T4" />
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
+        <dc:Bounds x="160" y="170" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Xor_1_di" bpmnElement="Xor_1" isMarkerVisible="true">
+        <dc:Bounds x="260" y="163" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Or_1_di" bpmnElement="Or_1" isMarkerVisible="true">
+        <dc:Bounds x="360" y="70" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="And_1_di" bpmnElement="And_1" isMarkerVisible="true">
+        <dc:Bounds x="360" y="260" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="T1_di" bpmnElement="T1">
+        <dc:Bounds x="480" y="140" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="T2_di" bpmnElement="T2">
+        <dc:Bounds x="620" y="40" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="T3_di" bpmnElement="T3">
+        <dc:Bounds x="620" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="T4_di" bpmnElement="T4">
+        <dc:Bounds x="620" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End">
+        <dc:Bounds x="770" y="170" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <!-- Edges for minimal connectivity -->
+      <bpmndi:BPMNEdge id="Flow_Start_Xor_di" bpmnElement="Flow_Start_Xor">
+        <di:waypoint x="196" y="188" />
+        <di:waypoint x="260" y="188" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_Start_Or_di" bpmnElement="Flow_Start_Or">
+        <di:waypoint x="178" y="170" />
+        <di:waypoint x="178" y="95" />
+        <di:waypoint x="360" y="95" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_Start_And_di" bpmnElement="Flow_Start_And">
+        <di:waypoint x="178" y="206" />
+        <di:waypoint x="178" y="285" />
+        <di:waypoint x="360" y="285" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_T1_End_di" bpmnElement="Flow_T1_End">
+        <di:waypoint x="580" y="180" />
+        <di:waypoint x="770" y="188" />
+      </bpmndi:BPMNEdge>
+
+      <!-- Edges for fan-out flows -->
+      <bpmndi:BPMNEdge id="F_x1_di" bpmnElement="F_x1">
+        <di:waypoint x="310" y="188" />
+        <di:waypoint x="480" y="180" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="F_x2_di" bpmnElement="F_x2">
+        <di:waypoint x="310" y="188" />
+        <di:waypoint x="620" y="80" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="F_x3_di" bpmnElement="F_x3">
+        <di:waypoint x="310" y="188" />
+        <di:waypoint x="620" y="260" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="F_o1_di" bpmnElement="F_o1">
+        <di:waypoint x="410" y="95" />
+        <di:waypoint x="480" y="180" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="F_o2_di" bpmnElement="F_o2">
+        <di:waypoint x="410" y="95" />
+        <di:waypoint x="620" y="80" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="F_a1_di" bpmnElement="F_a1">
+        <di:waypoint x="410" y="285" />
+        <di:waypoint x="620" y="260" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="F_a2_di" bpmnElement="F_a2">
+        <di:waypoint x="410" y="285" />
+        <di:waypoint x="620" y="360" />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

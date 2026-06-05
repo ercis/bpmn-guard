@@ -1,0 +1,21 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "added data collection 'RPDB' to activity 'check availability'",
+      "dimension": "data"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "added name 'Provision Team' to pool",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "changed activity 'Elicit information from customer' to collapsed sub-process",
+      "dimension": "task"
+    }
+  ]
+}

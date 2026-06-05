@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  backend:
+    name: Backend (FastAPI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install uv
+          uv sync
+        working-directory: backend
+      - name: Verify app imports
+        run: uv run python -c "from main import app; print('FastAPI app loaded successfully')"
+        working-directory: backend
+        env:
+          SYNC_DATABASE_URI: "postgresql://user:pass@localhost:5432/db"
+          ASYNC_DATABASE_URI: "postgresql+asyncpg://user:pass@localhost:5432/db"
+          GEMINI_API_KEY: "dummy-key"
+          OPENAI_API_KEY: "dummy-key"
+          OPENAI_API_ENDPOINT: "https://api.openai.com"
+
+  frontend:
+    name: Frontend (Next.js)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: frontend
+      - name: Build
+        run: pnpm build
+        working-directory: frontend
+        env:
+          NEXT_PUBLIC_BACKEND_URL: "http://localhost:8000"

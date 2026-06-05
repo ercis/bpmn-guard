@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_r8_invalid_sap_salesforce_24"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.40.1">
+  <bpmn:process id="Process_r8_invalid_sap_salesforce_24" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Case opened"><bpmn:outgoing>Flow_0</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:task id="Task_1" name="Create salesforce case"><bpmn:incoming>Flow_0</bpmn:incoming><bpmn:outgoing>Flow_1</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_2" name="Sync sap order"><bpmn:incoming>Flow_1</bpmn:incoming><bpmn:outgoing>Flow_2</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_3" name="Update crm record"><bpmn:incoming>Flow_2</bpmn:incoming><bpmn:outgoing>Flow_3</bpmn:outgoing></bpmn:task>
+    <bpmn:intermediateCatchEvent id="Event_1" name="Case updated"><bpmn:incoming>Flow_3</bpmn:incoming><bpmn:outgoing>Flow_4</bpmn:outgoing></bpmn:intermediateCatchEvent>
+    <bpmn:task id="Task_4" name="Create jira ticket"><bpmn:incoming>Flow_4</bpmn:incoming><bpmn:outgoing>Flow_5</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_5" name="Deploy kubernetes job"><bpmn:incoming>Flow_5</bpmn:incoming><bpmn:outgoing>Flow_6</bpmn:outgoing></bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_1" name="Is job complete?">
+      <bpmn:incoming>Flow_6</bpmn:incoming>
+      <bpmn:outgoing>Flow_yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_no</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_6" name="Notify customer"><bpmn:incoming>Flow_yes</bpmn:incoming><bpmn:outgoing>Flow_7</bpmn:outgoing></bpmn:task>
+    <bpmn:task id="Task_7" name="Escalate case"><bpmn:incoming>Flow_no</bpmn:incoming><bpmn:outgoing>Flow_8</bpmn:outgoing></bpmn:task>
+    <bpmn:endEvent id="EndEvent_1" name="Case closed"><bpmn:incoming>Flow_7</bpmn:incoming></bpmn:endEvent>
+    <bpmn:endEvent id="EndEvent_2" name="Case escalated"><bpmn:incoming>Flow_8</bpmn:incoming></bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0" sourceRef="StartEvent_1" targetRef="Task_1" name="Start" />
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="Task_1" targetRef="Task_2" name="Next" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_2" targetRef="Task_3" name="Next" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_3" targetRef="Event_1" name="Update sent" />
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Event_1" targetRef="Task_4" name="Proceed" />
+    <bpmn:sequenceFlow id="Flow_5" sourceRef="Task_4" targetRef="Task_5" name="Next" />
+    <bpmn:sequenceFlow id="Flow_6" sourceRef="Task_5" targetRef="Gateway_1" name="Ready" />
+    <bpmn:sequenceFlow id="Flow_yes" sourceRef="Gateway_1" targetRef="Task_6" name="Yes" />
+    <bpmn:sequenceFlow id="Flow_no" sourceRef="Gateway_1" targetRef="Task_7" name="No" />
+    <bpmn:sequenceFlow id="Flow_7" sourceRef="Task_6" targetRef="EndEvent_1" name="Done" />
+    <bpmn:sequenceFlow id="Flow_8" sourceRef="Task_7" targetRef="EndEvent_2" name="Done" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_r8_invalid_sap_salesforce_24" />
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

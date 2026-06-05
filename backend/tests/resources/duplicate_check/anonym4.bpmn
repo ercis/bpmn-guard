@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_anonym4" targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:collaboration id="Collab_anonym4">
+    <bpmn:participant id="Participant_CreditCo" name="Credit Company" processRef="Process_Credit" />
+    <bpmn:participant id="Participant_Customer" name="Customer" />
+    <bpmn:participant id="Participant_External" name="External Service Provider" />
+
+    <bpmn:messageFlow id="Msg_inquiry" sourceRef="Participant_Customer" targetRef="Start_inquiry" />
+    <bpmn:messageFlow id="Msg_accept" sourceRef="End_accept" targetRef="Participant_Customer" />
+    <bpmn:messageFlow id="Msg_reject" sourceRef="End_reject" targetRef="Participant_Customer" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_Credit" isExecutable="false">
+    <bpmn:startEvent id="Start_inquiry" name="Credit inquiry received">
+      <bpmn:outgoing>Flow_start_to_collect</bpmn:outgoing>
+      <bpmn:messageEventDefinition />
+    </bpmn:startEvent>
+
+    <bpmn:task id="Task_collect" name="Collect applicant information">
+      <bpmn:incoming>Flow_start_to_collect</bpmn:incoming>
+      <bpmn:outgoing>Flow_collect_to_amountDecision</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_classifyAmount" name="Classify requested amount">
+      <bpmn:incoming>Flow_collect_to_amountDecision</bpmn:incoming>
+      <bpmn:outgoing>Flow_classify_to_amountGW</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_amount" name="Amount category?">
+      <bpmn:incoming>Flow_classify_to_amountGW</bpmn:incoming>
+      <bpmn:outgoing>Flow_small_to_assess</bpmn:outgoing>
+      <bpmn:outgoing>Flow_large_to_requestApproval</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_assess" name="Assess risk">
+      <bpmn:incoming>Flow_small_to_assess</bpmn:incoming>
+      <bpmn:outgoing>Flow_assess_to_riskGW</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_risk" name="Risk level?">
+      <bpmn:incoming>Flow_assess_to_riskGW</bpmn:incoming>
+      <bpmn:outgoing>Flow_low_to_accept</bpmn:outgoing>
+      <bpmn:outgoing>Flow_high_to_requestApproval</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_requestApproval" name="Request management approval">
+      <bpmn:incoming>Flow_large_to_requestApproval</bpmn:incoming>
+      <bpmn:incoming>Flow_high_to_requestApproval</bpmn:incoming>
+      <bpmn:outgoing>Flow_approval_to_outcomeGW</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_outcome" name="Approval outcome">
+      <bpmn:incoming>Flow_approval_to_outcomeGW</bpmn:incoming>
+      <bpmn:outgoing>Flow_reject_to_end</bpmn:outgoing>
+      <bpmn:outgoing>Flow_accept_to_acceptTask</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_accept" name="Accept credit inquiry">
+      <bpmn:incoming>Flow_low_to_accept</bpmn:incoming>
+      <bpmn:incoming>Flow_accept_to_acceptTask</bpmn:incoming>
+      <bpmn:outgoing>Flow_acceptTask_to_end</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="End_accept" name="Inquiry accepted">
+      <bpmn:incoming>Flow_acceptTask_to_end</bpmn:incoming>
+      <bpmn:messageEventDefinition />
+    </bpmn:endEvent>
+
+    <bpmn:task id="Task_reject" name="Reject credit inquiry">
+      <bpmn:incoming>Flow_reject_to_end</bpmn:incoming>
+      <bpmn:outgoing>Flow_rejectTask_to_end</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="End_reject" name="Inquiry rejected">
+      <bpmn:incoming>Flow_rejectTask_to_end</bpmn:incoming>
+      <bpmn:messageEventDefinition />
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_start_to_collect" sourceRef="Start_inquiry" targetRef="Task_collect" />
+    <bpmn:sequenceFlow id="Flow_collect_to_amountDecision" sourceRef="Task_collect" targetRef="Task_classifyAmount" />
+    <bpmn:sequenceFlow id="Flow_classify_to_amountGW" sourceRef="Task_classifyAmount" targetRef="Gateway_amount" />
+
+    <bpmn:sequenceFlow id="Flow_small_to_assess" name="Amount <= 1M" sourceRef="Gateway_amount" targetRef="Task_assess" />
+    <bpmn:sequenceFlow id="Flow_large_to_requestApproval" name="Amount > 1M" sourceRef="Gateway_amount" targetRef="Task_requestApproval" />
+
+    <bpmn:sequenceFlow id="Flow_assess_to_riskGW" sourceRef="Task_assess" targetRef="Gateway_risk" />
+    <bpmn:sequenceFlow id="Flow_low_to_accept" name="Risk low" sourceRef="Gateway_risk" targetRef="Task_accept" />
+    <bpmn:sequenceFlow id="Flow_high_to_requestApproval" name="Risk high" sourceRef="Gateway_risk" targetRef="Task_requestApproval" />
+
+    <bpmn:sequenceFlow id="Flow_approval_to_outcomeGW" sourceRef="Task_requestApproval" targetRef="Gateway_outcome" />
+    <bpmn:sequenceFlow id="Flow_reject_to_end" name="Credit rejected" sourceRef="Gateway_outcome" targetRef="Task_reject" />
+    <bpmn:sequenceFlow id="Flow_accept_to_acceptTask" name="Credit accepted" sourceRef="Gateway_outcome" targetRef="Task_accept" />
+
+    <bpmn:sequenceFlow id="Flow_acceptTask_to_end" sourceRef="Task_accept" targetRef="End_accept" />
+    <bpmn:sequenceFlow id="Flow_rejectTask_to_end" sourceRef="Task_reject" targetRef="End_reject" />
+  </bpmn:process>
+
+</bpmn:definitions>
+

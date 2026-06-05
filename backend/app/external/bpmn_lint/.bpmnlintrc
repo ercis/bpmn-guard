@@ -1,0 +1,12 @@
+{
+  "extends": "bpmnlint:recommended",
+  "rules": {
+    "label-required": "warn",
+    "no-implicit-end": "error",
+    "no-disconnected": "error",
+    "start-event-required": "error",
+    "end-event-required": "error",
+    "no-gateway-join-fork": "error",
+    "superfluous-gateway": "warn"
+  }
+}

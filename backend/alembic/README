@@ -1,0 +1,44 @@
+# Alembic Database Migrations
+
+Generic single-database configuration for managing database schema changes.
+
+## Prerequisites
+- Ensure your database models are imported in `app/db/__init__.py`
+- Set `SYNC_DATABASE_URI` in your `.env` file (e.g., `postgresql://user:password@localhost:5432/dbname`)
+
+## Common Commands
+
+All commands should be run from the `backend/` directory using `uv run`:
+
+```bash
+# Create a new migration (auto-detect model changes)
+uv run alembic revision --autogenerate -m "description of changes"
+
+# Create an empty migration (manual changes)
+uv run alembic revision -m "description of changes"
+
+# Apply all pending migrations
+uv run alembic upgrade head
+
+# Rollback one migration
+uv run alembic downgrade -1
+
+# Rollback to a specific revision
+uv run alembic downgrade <revision_id>
+
+# Show current database revision
+uv run alembic current
+
+# Show migration history
+uv run alembic history --verbose
+
+# Show pending migrations
+uv run alembic heads
+```
+
+## Workflow Example
+
+1. Add/modify models in your codebase and import them in `app/db/__init__.py`
+2. Generate migration: `uv run alembic revision --autogenerate -m "add user table"`
+3. Review the generated migration file in `alembic/versions/`
+4. Apply migration: `uv run alembic upgrade head`

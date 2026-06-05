@@ -1,0 +1,25 @@
+{
+  "relevant changes": [],
+
+  "unrelated changes": [
+    {
+      "change_description": "added empty pool 'external service provider'",
+      "dimension": "organization"
+    }
+  ],
+
+  "negligible changes": [
+    {
+      "change_description": "renamed activity 'accept credit' to 'accept credit inquiry'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "renamed activity 'reject credit' to 'reject credit inquiry'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "renamed pool and capitalized first letter of company",
+      "dimension": "task"
+    }
+  ]
+}

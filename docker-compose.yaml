@@ -1,0 +1,54 @@
+# Explicit project name so Docker does not derive it from the parent folder name.
+# All containers, networks and volumes get the `bpmn-guard_` prefix instead.
+name: bpmn-guard
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      # The Next.js API proxy routes call the backend over the docker network.
+      NEXT_PUBLIC_BACKEND_URL: "http://backend:8000"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - backend/.env
+    environment:
+      SYNC_DATABASE_URI: "postgresql+psycopg://testuser:testpw@database:5432/bpmn_guard"
+      ASYNC_DATABASE_URI: "postgresql+asyncpg://testuser:testpw@database:5432/bpmn_guard"
+      BPMN_EXAMPLES_DIR: /app/bpmn_examples
+      LOCAL_STORAGE_DIR: /app/uploads
+    volumes:
+      - ./bpmn_examples:/app/bpmn_examples
+      - uploads:/app/uploads
+    depends_on:
+        - database
+
+  database:
+    image: pgvector/pgvector:pg17
+    container_name: database
+    ports:
+      - "8080:5432"
+    environment:
+      POSTGRES_DB: bpmn_guard
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpw
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/app/db/vector_init/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  pgdata:
+  uploads:

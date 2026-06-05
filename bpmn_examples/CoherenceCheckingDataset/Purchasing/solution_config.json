@@ -1,0 +1,57 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "changed end event to end message sent event",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added new closed pool 'Supplier' and connected to end event",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "added new sub-process to expand 'use goods from stock'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added activity 'enter consumed quantity' to sub-process",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added activity 'take goods from stock' to sub-process",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added data collection 'ERP System' to sub-process and connected to 'enter consumed quantity'",
+      "dimension": "data"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": [
+    {
+      "change_description": "split up activity 'approve & trigger order' in two activities",
+      "dimension": "task"
+    },
+    {
+      "change_description": "connected 'ERP System' to new activity 'trigger order'",
+      "dimension": "data"
+    },
+    {
+      "change_description": "added condition to existing flow after activity 'Check purchase requisition'",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "added activity 'use goods' to sub-process",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added Sequence Flows to sub-process",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "added Start and End activities to sub-process",
+      "dimension": "control flow"
+    }
+  ]
+}

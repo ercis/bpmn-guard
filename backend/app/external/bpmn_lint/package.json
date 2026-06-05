@@ -1,0 +1,29 @@
+{
+  "name": "bpmnlint-validator",
+  "version": "1.0.0",
+  "description": "BPMN validation service using bpmnlint for FastAPI backend integration",
+  "main": "validate.js",
+  "bin": {
+    "validate-bpmn": "./validate.js"
+  },
+  "scripts": {
+    "test": "node validate.js bpmn_examples/sample.bpmn",
+    "lint": "eslint .",
+    "init-config": "node -e \"require('fs').writeFileSync('.bpmnlintrc', JSON.stringify({extends: 'bpmnlint:recommended'}, null, 2))\""
+  },
+  "keywords": [
+    "bpmn",
+    "validation",
+    "linter",
+    "bpmnlint"
+  ],
+  "author": "BPMN Guard",
+  "license": "MIT",
+  "dependencies": {
+    "bpmn-moddle": "^9.0.1",
+    "bpmnlint": "^11.6.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

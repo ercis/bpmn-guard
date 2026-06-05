@@ -1,0 +1,42 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "deleted lane 'Logistics'",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "moved activity 'Insure Parcel' to 'Secretary'",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "moved clarify shipment method before parallel gateway",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "added new task 'choose packaging'",
+      "dimension": "task"
+    }
+  ],
+
+  "unrelated changes": [
+    {
+      "change_description": "moved end event 'Shipment prepared' in secretary lane",
+      "dimension": "organization"
+    }
+  ],
+
+  "negligible changes": [
+    {
+      "change_description": "added 'is' to condition 'If insurance necessary'",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "changed last gateway to syntactically correct parallel gateway",
+      "dimension": "control flow"
+    },
+    {
+      "change_description": "renamed pool to 'Computer Hardware Shop'",
+      "dimension": "organization"
+    }
+  ]
+}

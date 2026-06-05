@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Defs_gateway_missing_question"
+                  targetNamespace="http://bpmn.io/schema/bpmn"
+                  exporter="Camunda Modeler"
+                  exporterVersion="5.40.1">
+
+  <bpmn:process id="Process_1" isExecutable="false">
+    <bpmn:startEvent id="Start" name="Start">
+      <bpmn:outgoing>Flow_in</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:exclusiveGateway id="Gw_1" name="Approved">
+      <bpmn:incoming>Flow_in</bpmn:incoming>
+      <bpmn:outgoing>Flow_yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_no</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_yes" name="Handle approval">
+      <bpmn:incoming>Flow_yes</bpmn:incoming>
+      <bpmn:outgoing>Flow_yes_end</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_no" name="Handle rejection">
+      <bpmn:incoming>Flow_no</bpmn:incoming>
+      <bpmn:outgoing>Flow_no_end</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="End" name="End">
+      <bpmn:incoming>Flow_yes_end</bpmn:incoming>
+      <bpmn:incoming>Flow_no_end</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_in" sourceRef="Start" targetRef="Gw_1" />
+    <bpmn:sequenceFlow id="Flow_yes" name="Yes" sourceRef="Gw_1" targetRef="Task_yes" />
+    <bpmn:sequenceFlow id="Flow_no" name="No" sourceRef="Gw_1" targetRef="Task_no" />
+    <bpmn:sequenceFlow id="Flow_yes_end" sourceRef="Task_yes" targetRef="End" />
+    <bpmn:sequenceFlow id="Flow_no_end" sourceRef="Task_no" targetRef="End" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1">
+
+      <bpmndi:BPMNShape id="Start_di" bpmnElement="Start">
+        <dc:Bounds x="150" y="160" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Gw_1_di" bpmnElement="Gw_1" isMarkerVisible="true">
+        <dc:Bounds x="260" y="153" width="50" height="50" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_yes_di" bpmnElement="Task_yes">
+        <dc:Bounds x="380" y="80" width="120" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Task_no_di" bpmnElement="Task_no">
+        <dc:Bounds x="380" y="220" width="120" height="80" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="End_di" bpmnElement="End">
+        <dc:Bounds x="560" y="160" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Flow_in_di" bpmnElement="Flow_in">
+        <di:waypoint x="186" y="178" />
+        <di:waypoint x="260" y="178" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_yes_di" bpmnElement="Flow_yes">
+        <di:waypoint x="310" y="178" />
+        <di:waypoint x="310" y="120" />
+        <di:waypoint x="380" y="120" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_no_di" bpmnElement="Flow_no">
+        <di:waypoint x="310" y="178" />
+        <di:waypoint x="310" y="260" />
+        <di:waypoint x="380" y="260" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_yes_end_di" bpmnElement="Flow_yes_end">
+        <di:waypoint x="500" y="120" />
+        <di:waypoint x="560" y="178" />
+      </bpmndi:BPMNEdge>
+
+      <bpmndi:BPMNEdge id="Flow_no_end_di" bpmnElement="Flow_no_end">
+        <di:waypoint x="500" y="260" />
+        <di:waypoint x="560" y="178" />
+      </bpmndi:BPMNEdge>
+
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

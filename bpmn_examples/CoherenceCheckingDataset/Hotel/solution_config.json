@@ -1,0 +1,32 @@
+{
+  "relevant changes": [
+    {
+      "change_description": "added Task 'note preference for non-alcoholic drinks'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "added data 'order' and connected to multiple Tasks",
+      "dimension": "data"
+    },
+    {
+      "change_description": "deleted Task 'Return to Room-Service station'",
+      "dimension": "task"
+    },
+    {
+      "change_description": "moved Task 'Debit Guest's Account' to Room Service Manager",
+      "dimension": "organization"
+    },
+    {
+      "change_description": "added data object 'note' and connected to activity 'note preference for non-alcoholic drinks'",
+      "dimension": "data"
+    },
+    {
+      "change_description": "moved Task 'Debit Guest's Account' to the start of the process",
+      "dimension": "control flow"
+    }
+  ],
+
+  "unrelated changes": [],
+
+  "negligible changes": []
+}
